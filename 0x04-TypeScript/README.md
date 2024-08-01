@@ -207,3 +207,125 @@ This project involves tasks that help in understanding and implementing TypeScri
     ```
   * Output: `{ firstName: 'Jane', lastName: 'Smith', location: 'San Francisco', numberOfReports: 5 }`
 
+#### 8. Ambient Namespaces
+- **Directory:** `0x04-TypeScript`
+- **Files:** `task_3/js/main.ts`, `task_3/js/interface.ts`, `task_3/js/crud.d.ts`
+- **Description:**
+  1. Create a directory called `task_3` and copy these configuration files into it: `package.json`, `webpack.config.js`, `tsconfig.json`.
+  2. Inside `interface.ts`:
+     - Create a type `RowID` and set it equal to `number`.
+     - Create an interface `RowElement` that contains these 3 fields:
+       - `firstName`: `string`
+       - `lastName`: `string`
+       - `age?`: `number`
+  3. Copy `crud.js` into the `task_3/js` directory:
+     ```javascript
+     export function insertRow(row) {
+       console.log('Insert row', row);
+       return Math.floor(Math.random() * Math.floor(1000));
+     }
+
+     export function deleteRow(rowId) {
+       console.log('Delete row id', rowId);
+       return;
+     }
+
+     export function updateRow(rowId, row) {
+       console.log(`Update row ${rowId}`, row);
+       return rowId;
+     }
+     ```
+  4. Write an ambient file within `task_3/js`, named `crud.d.ts` containing the type declarations for each `crud` function. At the top of the file import `RowID` and `RowElement` from `interface.ts`.
+  5. In `main.ts`:
+     - At the top of the file create a triple slash directive that includes all the dependencies from `crud.d.ts`.
+     - Import the `rowID` type and `rowElement` from `interface.ts`.
+     - Import everything from `crud.js` as `CRUD`.
+     - Create an object called `row` with the type `RowElement` with the fields set to these values:
+       - `firstName`: `Guillaume`
+       - `lastName`: `Salva`
+     - Create a `const` variable named `newRowID` with the type `RowID` and assign the value the `insertRow` command.
+     - Create a `const` variable named `updatedRow` with the type `RowElement` and update row with an `age` field set to `23`.
+     - Call the `updateRow` and `deleteRow` commands.
+  6. Requirements:
+     - When running `npm run build`, no TypeScript error should be displayed.
+     - Every variable should use TypeScript when possible.
+     - The main file and the ambient file should both import the types defined in the interface file.
+     - You can easily test your ambient file by looking at the intellisense of your IDE when using the 3rd party functions.
+
+#### 9. Namespace & Declaration merging
+- **Directory:** `0x04-TypeScript`
+- **Files:** `task_4/package.json`, `task_4/tsconfig.json`, `task_4/js/subjects/Cpp.ts`, `task_4/js/subjects/Java.ts`, `task_4/js/subjects/React.ts`, `task_4/js/subjects/Subject.ts`, `task_4/js/subjects/Teacher.ts`
+- **Description:**
+  1. Create a new directory `task_4` and copy the above `tsconfig.json` and put this `package.json` in there:
+     ```json
+     {
+       "name": "task_4",
+       "version": "1.0.0",
+       "description": "",
+       "main": "index.js",
+       "scripts": {
+         "build": "webpack",
+         "test": "echo \"Error: no test specified\" && exit 1"
+       },
+       "keywords": [],
+       "author": "",
+       "license": "ISC",
+       "devDependencies": {
+         "@typescript-eslint/eslint-plugin": "^2.4.0",
+         "@typescript-eslint/parser": "^2.4.0",
+         "clean-webpack-plugin": "^3.0.0",
+         "fork-ts-checker-webpack-plugin": "^1.5.1",
+         "html-webpack-plugin": "^3.2.0",
+         "ts-loader": "^6.2.0",
+         "typescript": "^3.6.4",
+         "webpack": "^4.41.2",
+         "webpack-cli": "^3.3.9",
+         "webpack-dev-server": "^3.8.2"
+       }
+     }
+     ```
+  2. In `task_4/js/subjects`:
+     - Create a file `Teacher.ts` and write a `Teacher` interface in a namespace named `Subjects`:
+       - The interface requires `firstName` and `lastName` as `string`.
+     - Create a file `Subject.ts` and write a `Subject` class in the same namespace named `Subjects`:
+       - The class has one attribute `teacher` that implements the `Teacher` interface.
+       - The class has one setter method `setTeacher` that accepts a teacher in argument (and as setter, set the instance attribute `teacher` with it).
+     - Create a file `Cpp.ts` and make the following modifications in the same namespace:
+       - Using declaration merging, add a new optional attribute `experienceTeachingC` (`number`) to the `Teacher` interface.
+       - Create a class `Cpp` extending from `Subject`.
+       - Write a method named `getRequirements` that will return a string `Here is the list of requirements for Cpp`.
+       - Write a method named `getAvailableTeacher` that will return a string `Available Teacher: <first name of teacher>`. If the teacher doesn’t have any experience in teaching C, then the method should return a string `No available teacher`.
+     - Create a file `React.ts` and write a `React` Class in the same namespace:
+       - Add a new attribute `experienceTeachingReact?` (`number`) to the `Teacher` interface.
+       - In the class, write a method named `getRequirements` that will return a string `Here is the list of requirements for React`.
+       - Write a method named `getAvailableTeacher` that will return a string `Available Teacher: <first name of teacher>`. If the teacher doesn’t have any experience in teaching React, then the method should return a string `No available teacher`.
+     - Create a file `Java.ts` and write a `Java` Class in the same namespace:
+       - Add a new attribute `experienceTeachingJava?` (`number`) to the `Teacher` interface.
+       - In the class, write a method named `getRequirements` that will return a string `Here is the list of requirements for Java`.
+       - Write a method named `getAvailableTeacher` that will return a string `Available Teacher: <first name of teacher>`. If the teacher doesn’t have any experience in teaching Java, then the method should return a string `No available teacher`.
+
+#### 10. Update task_4/js/main.ts
+- **Directory:** `0x04-TypeScript`
+- **Files:** `task_4/js/main.ts`
+- **Description:**
+  1. Create and export a constant `cpp` for `Cpp` Subjects.
+  2. Create and export a constant `java` for `Java` Subjects.
+  3. Create and export a constant `react` for `React` Subjects.
+  4. Create and export one `Teacher` object `cTeacher` with `experienceTeachingC` = `10`.
+  5. For `Cpp` subject, log to the console `C++`, set `cTeacher` as the teacher, call the two methods `getRequirements` and `getAvailableTeacher` and print the strings they return.
+  6. For `Java` subject, log to the console `Java`, set `cTeacher` as the teacher, call the two methods `getRequirements` and `getAvailableTeacher`, and print the strings they return.
+  7. For `React` subject, log to the console `React`, set `cTeacher` as the teacher, call the two methods `getRequirements` and `getAvailableTeacher`, and print the strings they return.
+
+#### 11. Brand convention & Nominal typing
+- **Directory:** `0x04-TypeScript`
+- **Files:** `task_5/js/main.ts`, `task_5/package.json`, `task_5/webpack.config.js`, `task_5/tsconfig.json`
+- **Description:**
+  1. Create a directory `task_5` and copy these configuration files into the root of `task_5`: `package.json`, `tsconfig.json`, `webpack.config.js`.
+  2. In `task_5/js/main.ts`:
+     - Create two interfaces `MajorCredits` and `MinorCredits`:
+       - Each interface defines a number named `credits`.
+       - Add a brand property to each interface to uniquely identify each of them.
+     - Create two functions named `sumMajorCredits` and `sumMinorCredits`:
+       - Each function takes two arguments `subject1` and `subject2`.
+       - `sumMajorCredits` returns `MajorCredits` value and `sumMinorCredits` returns `MinorCredits` value.
+       - Each function sums the credits of the two subjects.
