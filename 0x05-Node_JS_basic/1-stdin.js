@@ -8,4 +8,3 @@ readline.question('Welcome to Holberton School, what is your name?\n', (name) =>
   console.log('This important software is now closing');
   readline.close();
 });
-
