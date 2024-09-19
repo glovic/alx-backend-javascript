@@ -3,8 +3,8 @@ const readline = require('readline').createInterface({
   output: process.stdout,
 });
 
-readline.question(`Welcome to Holberton School, what is your name?"\n`, name => {
+readline.question('Welcome to Holberton School, what is your name?\n', (name) => {
   console.log(`Your name is: ${name}`);
-  console.log("This important software is now closing");
+  console.log('This important software is now closing');
   readline.close();
-})
+});
